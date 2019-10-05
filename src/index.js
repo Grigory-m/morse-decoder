@@ -38,7 +38,26 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    // write your solution here
+  let map = new Map();
+  for (let key of Object.keys(MORSE_TABLE)) {
+    let newKey = key.split('').map(value => value == '.' ? '10' : '11').join(''); 
+    
+    if (key.length == 1) newKey = '00000000' + newKey; 
+    if (key.length == 2) newKey = '000000' + newKey;
+    if (key.length == 3) newKey = '0000' + newKey;
+    if (key.length == 4) newKey = '00' + newKey;  
+            
+    map.set(newKey, MORSE_TABLE[key]);  
+  }
+  map.set('**********', ' ');
+
+  let j = 0;
+  let decodedMorse = '';
+  for (let i = 0; i < (expr.length / 10); i++) {
+    decodedMorse += map.get(expr.slice(j, j + 10));
+    j += 10;
+  }
+  return decodedMorse;
 }
 
 module.exports = {
